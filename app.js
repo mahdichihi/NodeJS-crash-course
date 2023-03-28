@@ -81,7 +81,7 @@ app.get("/blogs", (req, res) => {
     });
 });
 
-app.get("/create-blog", (req, res) => {
+app.get("/blogs-create", (req, res) => {
   res.render("create", { title: "Create a new blog" });
 });
 
