@@ -18,7 +18,7 @@
       const trashcan = document.querySelector("a.delete");
 
       trashcan.addEventListener("click", (e) => {
-        // e.preventDefault(); // prevent default link behavior
+        e.preventDefault(); // prevent default link behavior
 
         const endpoint = `/blogs/${trashcan.dataset.doc}`;
 
