@@ -21,6 +21,7 @@ app.listen(3000);
 
 // middleware & static files
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // mongoose and mongo sandbox routes
@@ -36,9 +37,7 @@ app.get("/add-blog", (req, res) => {
     .then((result) => {
       res.send(result);
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
 });
 
 app.get("/all-blogs", (req, res) => {
@@ -46,9 +45,7 @@ app.get("/all-blogs", (req, res) => {
     .then((result) => {
       res.send(result);
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
 });
 
 app.get("/single-blog", (req, res) => {
@@ -56,9 +53,7 @@ app.get("/single-blog", (req, res) => {
     .then((result) => {
       res.send(result);
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
 });
 
 app.get("/", (req, res) => {
@@ -76,13 +71,41 @@ app.get("/blogs", (req, res) => {
     .then((result) => {
       res.render("index", { title: "All Blogs", blogs: result });
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
 });
 
-app.get("/create-blog", (req, res) => {
+app.post("/blogs", (req, res) => {
+  const blog = new Blog(req.body);
+
+  blog
+    .save()
+    .then((result) => {
+      res.redirect("/blogs");
+    })
+    .catch((err) => console.log(err));
+});
+// create blog page
+app.get("/blogs/create", (req, res) => {
   res.render("create", { title: "Create a new blog" });
+});
+
+app.get("/blogs/:id", (req, res) => {
+  const id = req.params.id;
+  Blog.findById(id)
+    .then((result) => {
+      res.render("details", { blog: result, title: "Create a new blog" });
+    })
+    .catch((err) => console.log(err));
+});
+
+app.delete("/blogs/:id", (req, res) => {
+  const id = req.params.id;
+
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      res.json({ redirect: "/blogs" });
+    })
+    .catch((err) => console.log(err));
 });
 
 // 404 page
